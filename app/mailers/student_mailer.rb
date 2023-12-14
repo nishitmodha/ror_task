@@ -15,4 +15,9 @@ class StudentMailer < ApplicationMailer
     mail(to: emails, subject: 'Student has been created')
   end
 
+  def good_morning_mail(student)
+    @student = student
+    mail(to: @student, subject: 'Good Morning')
+  end
+
 end

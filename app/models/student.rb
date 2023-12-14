@@ -10,7 +10,7 @@ class Student < ApplicationRecord
   after_save :send_verified_mail, if: :saved_change_to_verified?
 
   def self.ransackable_attributes(auth_object = nil)
-    ["address", "verified", "created_at", "date_of_birth", "email",  "id", "id_value", "name", "remember_created_at", "reset_password_sent_at", "reset_password_token", "updated_at"]
+    Student.column_names
   end
 
   def active_for_authentication?

@@ -39,6 +39,8 @@ gem 'active_admin_import', '~> 5.1'
 
 gem 'letter_opener', '~> 1.8', '>= 1.8.1'
 
+gem 'whenever', require: false
+
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
