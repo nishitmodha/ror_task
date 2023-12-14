@@ -8,3 +8,5 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+
+Student.create!(email: "student1@g.com", password: "password", password_confirmation: "password", name: "Student1", date_of_birth: "01-01-1999", address: "Address1")
