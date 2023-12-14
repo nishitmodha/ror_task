@@ -6,6 +6,8 @@ class Student < ApplicationRecord
 
   validates :email, uniqueness: true
 
+  after_save :send_verified_mail, if: :saved_change_to_verified?
+
   def self.ransackable_attributes(auth_object = nil)
     ["address", "verified", "created_at", "date_of_birth", "email",  "id", "id_value", "name", "remember_created_at", "reset_password_sent_at", "reset_password_token", "updated_at"]
   end
@@ -29,5 +31,9 @@ class Student < ApplicationRecord
       )
       s.save
     end
+  end
+
+  def send_verified_mail
+    StudentMailer.student_verified_mail(self).deliver_now if self.verified
   end
 end

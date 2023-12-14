@@ -44,8 +44,7 @@ ActiveAdmin.register Student do
       f.input :email
       f.input :address
       f.input :date_of_birth
-      f.input :password
-      f.input :password_confirmation
+      f.input :verified
     end
     f.actions
   end
