@@ -5,7 +5,7 @@ ActiveAdmin.register Student do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :name, :email, :date_of_birth, :address, :verified
+  permit_params :name, :email, :password, :password_confirmation, :reset_password_token, :reset_password_sent_at, :remember_created_at, :date_of_birth, :address, :verified
   #
   # or
   #
@@ -14,7 +14,19 @@ ActiveAdmin.register Student do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
+  action_item :only => :index do
+    link_to 'Upload CSV', :action => 'upload_csv'
+  end
 
+  collection_action :upload_csv do
+    render "admin/csv/upload_csv"
+  end
+
+  collection_action :import_csv, :method => :post do
+    Student.import(params[:dump][:file])
+    redirect_to :action => :index, :notice => "CSV imported successfully!"
+  end
+  
   index do
     selectable_column
     id_column
@@ -24,6 +36,18 @@ ActiveAdmin.register Student do
     column :address
     column :verified
     actions
+  end
+
+  form do |f|
+    f.inputs do
+      f.input :name
+      f.input :email
+      f.input :address
+      f.input :date_of_birth
+      f.input :password
+      f.input :password_confirmation
+    end
+    f.actions
   end
   
 end
