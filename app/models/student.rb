@@ -6,6 +6,7 @@ class Student < ApplicationRecord
 
   validates :email, uniqueness: true
 
+  after_create :send_mail_to_admin
   after_save :send_verified_mail, if: :saved_change_to_verified?
 
   def self.ransackable_attributes(auth_object = nil)
@@ -21,6 +22,7 @@ class Student < ApplicationRecord
   end
 
   def self.import(file)
+    err = []
     CSV.foreach(file.path, headers: true) do |row|
       s = Student.new(
         name: row["name"],
@@ -29,11 +31,20 @@ class Student < ApplicationRecord
         password: row["password"],
         date_of_birth: row["date_of_birth"]
       )
-      s.save
+      if s.save
+        StudentMailer.created_by_admin(s).deliver_now
+      else
+        err << s.errors.full_messages
+      end
     end
+    err
   end
 
   def send_verified_mail
     StudentMailer.student_verified_mail(self).deliver_now if self.verified
+  end
+
+  def send_mail_to_admin
+    StudentMailer.send_mail_to_admin(self).deliver_now
   end
 end

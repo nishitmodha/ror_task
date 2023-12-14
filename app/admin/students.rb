@@ -23,8 +23,14 @@ ActiveAdmin.register Student do
   end
 
   collection_action :import_csv, :method => :post do
-    Student.import(params[:dump][:file])
-    redirect_to :action => :index, :notice => "CSV imported successfully!"
+    import_data_errors = Student.import(params[:dump][:file])
+    if import_data_errors.present?
+      flash[:alert] = import_data_errors
+      redirect_to :action => :index
+    else
+      flash[:notice] = "CSV imported successfully"
+      redirect_to :action => :index
+    end
   end
   
   index do
